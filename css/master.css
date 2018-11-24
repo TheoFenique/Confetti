@@ -1,0 +1,28 @@
+*
+{
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+h1 
+{
+    font-family: 'Oswald', sans-serif;
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    user-select: none;
+}
+
+#canvas 
+{
+    background-image: linear-gradient(to right top, #845ec2, #e65faa, #ff8080, #ffbb61, #f9f871);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
