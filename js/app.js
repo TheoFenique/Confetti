@@ -1,6 +1,7 @@
 const $canvas = document.querySelector('#canvas')
 const ctx = $canvas.getContext('2d')
 let vector = []
+let confettisTab = []
 
 
 /* RESIZE */
@@ -9,7 +10,6 @@ const resize = () =>
     $canvas.width = window.innerWidth
     $canvas.height = window.innerHeight
 }
-
 window.addEventListener('resize', resize)
 resize()
 
@@ -18,10 +18,7 @@ resize()
 const cursorStatus = {
     x : 0,
     y : 0,
-    press : false,
-    pressGeo : {x : 0, y :0},
-    pressAngle : 0,
-    pressLength : 0,
+    press : false
 }
 
 const drawLine = (vector) =>
@@ -43,12 +40,6 @@ window.addEventListener('mousemove', (_e) =>
     if(cursorStatus.press)
     {
         drawLine(vector)
-        cursorStatus.pressAngle = Math.atan2(_e.clientX - vector[0].x, _e.clientY - vector[0].y) *180 / Math.PI
-        cursorStatus.pressLength = Math.hypot(_e.clientX - vector[0].x, _e.clientY - vector[0].y)
-    }
-    else
-    {
-        ctx.clearRect(0, 0, $canvas.width, $canvas.height)
     }
 })
 
@@ -78,14 +69,36 @@ window.addEventListener('mouseup', (_e) =>
         y
     }
     
-    
+    confettisTab.push(new Confetti({
+        vector  : vector,
+        angle   : cursorStatus.angle,
+        length  : cursorStatus.length,
+        context : ctx,
+        width   : $canvas.width, 
+        height  : $canvas.height
+    }))
+    console.log(confettisTab)
 })
 
 
+/* CONFETTIS */
+
+
+
+/* ANIMATION */
 const loop = () =>
 {
     window.requestAnimationFrame(loop)
-    
-}
+    for(const _confetti of confettisTab)
+    {
+        _confetti.draw()
+        if(_confetti.vector[0].y > $canvas.height)
+        {
+            _confetti.speed.y = window.height
+            console.log('touché')
+        }
+    }
+    confettisTab = confettisTab.filter(_confetti => !_confetti.isOut)
+} 
 
 loop()
